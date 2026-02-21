@@ -1,6 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import { ThemeProvider } from "@/components/theme-provider"
+import { Sidebar } from "@/components/sidebar"
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -26,11 +27,12 @@ export default function RootLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <html lang="en">
-          <body className="antialiased">
+        <div className="min-h-screen">
+          <Sidebar />
+          <div className="md:pl-64">
             {children}
-          </body>
-        </html>
+          </div>
+        </div>
       </ThemeProvider>
     </ClerkProvider>
   );
