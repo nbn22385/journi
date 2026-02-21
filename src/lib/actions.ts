@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { entries } from "@/lib/schema";
-import { eq, desc, sql, like, or } from "drizzle-orm";
+import { eq, desc, asc, sql, like, or } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
@@ -132,4 +132,26 @@ export async function deleteEntry(id: string) {
 
   revalidatePath("/");
   revalidatePath("/past");
+}
+
+export async function getInsights(days = 30) {
+  const { userId } = await auth();
+  if (!userId) return null;
+
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  startDate.setHours(0, 0, 0, 0);
+
+  const result = await db
+    .select({
+      id: entries.id,
+      mood: entries.mood,
+      content: entries.content,
+      createdAt: entries.createdAt,
+    })
+    .from(entries)
+    .where(sql`${entries.userId} = ${userId} AND ${entries.createdAt} >= ${startDate}`)
+    .orderBy(asc(entries.createdAt));
+
+  return result;
 }
