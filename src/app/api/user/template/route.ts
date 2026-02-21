@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function PUT(request: Request) {
   try {
@@ -11,26 +11,32 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const template = body.template || 'free';
 
-    const response = await fetch(`https://api.clerk.com/v1/users/${userId}/metadata`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-      },
-      body: JSON.stringify({
-        public_metadata: {
-          defaultTemplate: template,
-        },
-      }),
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: { defaultTemplate: template },
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to update metadata");
-    }
 
     return NextResponse.json({ success: true, template });
   } catch (error) {
     console.error("Failed to update user template:", error);
     return NextResponse.json({ error: "Failed to update template" }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ template: "free" });
+    }
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const template = user.publicMetadata?.defaultTemplate as string || "free";
+
+    return NextResponse.json({ template });
+  } catch (error) {
+    console.error("Failed to get user template:", error);
+    return NextResponse.json({ template: "free" });
   }
 }
