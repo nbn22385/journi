@@ -87,7 +87,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen pb-24 md:pb-4">
       <main className="max-w-2xl mx-auto p-4">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold">Today</h1>
             <p className="text-muted-foreground">
@@ -104,7 +104,7 @@ export default function HomePage() {
 
         {isEditing || !entry ? (
           <Card>
-            <CardContent className="pt-6 space-y-4">
+            <CardContent className="pt-4 space-y-3">
               <Input
                 placeholder="Title (optional)"
                 value={title}
@@ -115,7 +115,7 @@ export default function HomePage() {
                 placeholder="What's on your mind today?"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="min-h-[200px] resize-none"
+                className="min-h-[150px] resize-none"
               />
               <div className="space-y-2">
                 <p className="text-sm font-medium">How are you feeling?</p>
@@ -136,16 +136,16 @@ export default function HomePage() {
           </Card>
         ) : (
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="pt-4">
               {entry.title && (
-                <h2 className="text-xl font-semibold mb-4">{entry.title}</h2>
+                <h2 className="text-lg font-semibold mb-2">{entry.title}</h2>
               )}
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xl">
                   {["😢", "😔", "😐", "🙂", "😊"][entry.mood - 1]}
                 </span>
                 <span className="text-muted-foreground text-sm">
-                  Feeling {["terrible", "bad", "okay", "good", "great"][entry.mood - 1]} at{" "}
+                  {["terrible", "bad", "okay", "good", "great"][entry.mood - 1]} ·{" "}
                   {format(new Date(entry.createdAt), "h:mm a")}
                 </span>
               </div>
