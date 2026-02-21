@@ -5,6 +5,7 @@ export const entries = pgTable('entries', {
   userId: text('user_id').notNull(),
   title: text('title'),
   content: text('content').notNull(),
+  template: text('template').notNull().default('free'),
   mood: integer('mood').notNull().default(3),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

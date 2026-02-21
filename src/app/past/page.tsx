@@ -12,6 +12,7 @@ interface Entry {
   id: string;
   title: string | null;
   content: string;
+  template: string;
   mood: number;
   createdAt: string;
 }

@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { entries } from "@/lib/schema";
 import { eq, desc, asc, sql, like, or } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function getTodayEntry() {
@@ -75,6 +75,7 @@ export async function createEntry(data: {
   title?: string;
   content: string;
   mood: number;
+  template?: string;
 }) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
@@ -86,6 +87,7 @@ export async function createEntry(data: {
       title: data.title || null,
       content: data.content,
       mood: data.mood,
+      template: data.template || 'free',
     })
     .returning();
 
@@ -100,6 +102,7 @@ export async function updateEntry(
     title?: string;
     content: string;
     mood: number;
+    template?: string;
   }
 ) {
   const { userId } = await auth();
@@ -111,6 +114,7 @@ export async function updateEntry(
       title: data.title || null,
       content: data.content,
       mood: data.mood,
+      template: data.template || 'free',
       updatedAt: new Date(),
     })
     .where(sql`${entries.id} = ${id} AND ${entries.userId} = ${userId}`)
@@ -154,4 +158,9 @@ export async function getInsights(days = 30) {
     .orderBy(asc(entries.createdAt));
 
   return result;
+}
+
+export async function getUserDefaultTemplate(): Promise<string> {
+  const user = await currentUser();
+  return user?.publicMetadata?.defaultTemplate as string || 'free';
 }

@@ -29,6 +29,7 @@ export async function PUT(
       title: body.title,
       content: body.content,
       mood: body.mood,
+      template: body.template || 'free',
     });
     return NextResponse.json(entry);
   } catch (error) {
