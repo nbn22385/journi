@@ -1,5 +1,5 @@
 import { ClerkProvider } from '@clerk/nextjs'
-import { dark } from '@clerk/themes'
+import { shadcn } from '@clerk/themes'
 import { ThemeProvider } from "@/components/theme-provider"
 import { Sidebar } from "@/components/sidebar"
 import type { Metadata } from "next";
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider
       appearance={{
-        baseTheme: dark,
+        theme: shadcn,
       }}
     >
       <ThemeProvider
