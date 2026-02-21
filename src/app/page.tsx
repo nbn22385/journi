@@ -372,6 +372,31 @@ export default function HomePage() {
         {isEditing || !entry ? (
           <Card>
             <CardContent className="pt-4 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Template:</span>
+                <div className="flex gap-2">
+                  <Button
+                    variant={template === "free" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => {
+                      setTemplate("free");
+                    }}
+                  >
+                    Free Write
+                  </Button>
+                  <Button
+                    variant={template === "5min" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => {
+                      setTemplate("5min");
+                    }}
+                  >
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    5-Min
+                  </Button>
+                </div>
+              </div>
+              
               {template === "free" ? (
                 <FreeWriteEditor
                   content={content}
