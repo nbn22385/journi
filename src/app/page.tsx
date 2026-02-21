@@ -369,7 +369,15 @@ export default function HomePage() {
           </div>
         </div>
 
-        {isEditing || !entry ? (
+        {!entry && !isEditing ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-4">Start your journey</p>
+            <Button onClick={() => setIsEditing(true)}>
+              <PenLine className="h-4 w-4 mr-2" />
+              Add Your First Entry
+            </Button>
+          </div>
+        ) : isEditing || !entry ? (
           <Card>
             <CardContent className="pt-4 space-y-4">
               <div className="flex items-center gap-2">
